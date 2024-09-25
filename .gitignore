@@ -1,0 +1,51 @@
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+/dist/
+/build/
+
+# Logs
+logs/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE specific files
+.idea/
+.vscode/
+*.sw*
+
+# Ignore all test coverage reports
+/coverage/
+
+# Ignore temporary files
+*.tmp
+
+# Ignore all .exe files anywhere in the repository
+**/*.exe
+
+# Ignore all .class files anywhere in the repository
+**/*.class
+
+# Ignore any directory named 'target' at any level
+**/target/
+
+# Ignore compiled binaries and artifacts
+*.o
+*.out
+
+# Ignore any backup files created by editors
+*~
