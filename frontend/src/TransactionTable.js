@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import {useQuery} from '@tanstack/react-query';
 
 const transactions = [
   { id: 1, date: '2023-09-01', amount: '50 kWh', status: 'Completed' },
@@ -7,6 +9,25 @@ const transactions = [
 ];
 
 const TransactionTable = () => {
+  const[transactionData, setTransactionData] = useState(null);
+
+  const getTransactions = useQuery({
+        queryKey:['transaction'],
+        queryFn:()=>{
+            return getTransactions()
+        },
+        enabled:!!true,
+        refetchOnMount:true,
+        refetchOnReconnect:true,
+        refetchOnWindowFocus:false,
+    })
+    if(getTransactions.isLoading || getTransactions.isFetching){}    
+    else if(getTransactions.isFetched){
+        if(transactionData===null){
+            setTransactionData(getTransactions.data)
+        }
+    }
+
   return (
     <div className="overflow-x-auto">
       <h2 className="text-2xl font-bold text-gray-900 mb-4">Transaction History</h2>
