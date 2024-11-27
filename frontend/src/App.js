@@ -8,6 +8,7 @@ import ProducerDashboard from './ProducerDashboard';
 import TransactionTable from './TransactionTable';
 import BillingPayment from './BillingPayment';
 import RequestEnergy from './RequestEnergy';
+import DataFetchingComponent from './RenderTransactions';
 
 export const App = () =>{
   return (
@@ -21,6 +22,9 @@ export const App = () =>{
           <Route path="/transactions" element={<TransactionTable />} />
           <Route path="/billing-payment" element={<BillingPayment />} />
           <Route path="/request-energy" element={<RequestEnergy />} />
+          <Route path="/render" element={<DataFetchingComponent />} />
+
+          
         </Routes>
 
     </Router>

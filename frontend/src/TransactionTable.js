@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import {useQuery} from '@tanstack/react-query';
+import {getTransactions} from './features/TransactionServices'
 
 const transactions = [
   { id: 1, date: '2023-09-01', amount: '50 kWh', status: 'Completed' },
@@ -11,7 +12,7 @@ const transactions = [
 const TransactionTable = () => {
   const[transactionData, setTransactionData] = useState(null);
 
-  const getTransactions = useQuery({
+  const getTransactionQuery = useQuery({
         queryKey:['transaction'],
         queryFn:()=>{
             return getTransactions()
@@ -21,10 +22,15 @@ const TransactionTable = () => {
         refetchOnReconnect:true,
         refetchOnWindowFocus:false,
     })
-    if(getTransactions.isLoading || getTransactions.isFetching){}    
-    else if(getTransactions.isFetched){
-        if(transactionData===null){
-            setTransactionData(getTransactions.data)
+    if(getTransactionQuery.isLoading || getTransactionQuery.isFetching){}    
+    
+    else if(getTransactionQuery.isFetched){
+      console.log(getTransactionQuery.data)
+      let {assetsList} = getTransactionQuery.data
+      // console.log(assetsList[0])
+      if(transactionData===null){
+            setTransactionData(assetsList)
+            console.log(transactionData)
         }
     }
 
@@ -34,25 +40,36 @@ const TransactionTable = () => {
       <table className="min-w-full bg-white rounded-lg shadow-lg">
         <thead className="bg-gray-200">
           <tr>
-            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Date</th>
-            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Amount</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Date-Created</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Date-Purchased</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">ID</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">producer-ID</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Quantity</th>
             <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Status</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Type</th>
+            <th className="px-6 py-3 text-left text-sm font-medium text-gray-700 uppercase">Units</th>
+
           </tr>
         </thead>
         <tbody>
-          {transactions.map((transaction) => (
-            <tr key={transaction.id} className="border-b border-gray-200 hover:bg-gray-100">
-              <td className="px-6 py-4 text-sm text-gray-900">{transaction.date}</td>
-              <td className="px-6 py-4 text-sm text-gray-900">{transaction.amount}</td>
-              <td className={`px-6 py-4 text-sm ${transaction.status === 'Completed' ? 'text-green-600' : 'text-yellow-600'}`}>
-                {transaction.status}
+          {transactionData? transactionData.map((transaction) => (
+            <tr key={transaction.ID} className="border-b border-gray-200 hover:bg-gray-100">
+              <td className="px-6 py-4 text-sm text-gray-900">{transaction.Date_created_at}</td>
+              <td className="px-6 py-4 text-sm text-gray-900">{transaction.Date_purchased_at}</td>
+              <td className="px-6 py-4 text-sm text-gray-900">{transaction.ID}</td>
+              <td className="px-6 py-4 text-sm text-gray-900">{transaction.ProducerID}</td>
+              <td className="px-6 py-4 text-sm text-gray-900">{transaction.Quantity}</td>
+              <td className={`px-6 py-4 text-sm ${transaction.Status === 'ACTIVE' ? 'text-green-600' : 'text-yellow-600'}`}>
+                {transaction.Status}
               </td>
+              <td className="px-6 py-4 text-sm text-gray-900">{transaction.Type}</td>
+              <td className="px-6 py-4 text-sm text-gray-900">{transaction.Unit}</td>
             </tr>
-          ))}
+          )):null}
         </tbody>
       </table>
     </div>
-  );
+   );
 };
 
 export default TransactionTable;
